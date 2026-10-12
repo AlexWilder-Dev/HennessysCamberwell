@@ -15,6 +15,7 @@ fonts/              Libre Caslon Display and Libre Caslon Text (SIL Open Font Li
 photos/             venue photography goes here (see below)
 og.png              link preview image (1200 × 630)
 favicon.svg
+.github/workflows/  GitHub Pages deployment
 ```
 
 ## Photos
@@ -58,4 +59,6 @@ Then open http://localhost:8000. Use a local server rather than opening the file
 
 ## Deploy to GitHub Pages
 
-In the repository, go to **Settings → Pages**, set **Source** to **Deploy from a branch**, and choose `main` and `/ (root)`. There is no build step. All paths are relative, so the site works from `https://<user>.github.io/<repo>/`.
+Pages is set to deploy from **GitHub Actions**. Every push to `main` runs `.github/workflows/pages.yml`, which copies the site files into an artifact and publishes it. There is no build step. It can also be run by hand from the Actions tab.
+
+All paths are relative, so the site works from `https://<user>.github.io/<repo>/`.
