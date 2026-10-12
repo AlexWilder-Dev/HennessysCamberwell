@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Hennessy’s · Irish pub, Camberwell</title>
-  <meta name="description" content="Hennessy’s, a Victorian corner pub at 225 Camberwell New Road, London SE5. Guinness at £6 a pint, live music on Saturdays, sport, darts and pool. Open 12–midnight, every day.">
+  <meta name="description" content="Hennessy’s, a Victorian corner pub at 225 Camberwell New Road, London SE5. Guinness at £6 a pint, quiz night on Mondays, live music on Fridays, darts, pool and sport. Open 12–midnight, every day.">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#13100d">
   <meta property="og:title" content="Hennessy’s, Camberwell">
-  <meta property="og:description" content="Victorian corner pub on Camberwell New Road. Guinness at £6 a pint, live music on Saturdays. Open 12–midnight, every day.">
+  <meta property="og:description" content="A Victorian corner pub on Camberwell New Road. Guinness at £6 a pint, quiz night on Mondays, live music on Fridays. Open 12–midnight, every day.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://alexwilder-dev.github.io/HennessysCamberwell/">
   <meta property="og:image" content="https://alexwilder-dev.github.io/HennessysCamberwell/og.png">
@@ -18,6 +18,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preload" href="fonts/display.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/text-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="photos/lyric-wall.jpg" as="image">
   <link rel="stylesheet" href="css/styles.css">
   <script>
     // Hide settle-in elements before first paint. If the main script never runs, show everything after 3s.
@@ -28,35 +29,6 @@
 </head>
 <body>
   <svg class="sprite" aria-hidden="true" focusable="false">
-    <symbol id="i-tv" viewBox="0 0 24 24">
-      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round">
-        <rect x="2.75" y="5" width="18.5" height="12" rx="1"/>
-        <path d="M9 20.5h6M12 17v3.5M9 2.5l3 2.5 3-2.5"/>
-      </g>
-    </symbol>
-    <symbol id="i-darts" viewBox="0 0 24 24">
-      <g fill="none" stroke="currentColor" stroke-width="1.4">
-        <circle cx="12" cy="12" r="9.25"/>
-        <circle cx="12" cy="12" r="5.5"/>
-        <circle cx="12" cy="12" r="1.6" fill="currentColor"/>
-        <path d="M12 2.75v3.5M12 17.75v3.5M2.75 12h3.5M17.75 12h3.5" stroke-linecap="round"/>
-      </g>
-    </symbol>
-    <symbol id="i-pool" viewBox="0 0 24 24">
-      <g fill="none" stroke="currentColor" stroke-width="1.4">
-        <circle cx="12" cy="12" r="9.25"/>
-        <circle cx="12" cy="10.5" r="4"/>
-      </g>
-      <path fill="currentColor" d="M12 8.1a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2zm0 2.6a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z"/>
-    </symbol>
-    <symbol id="i-music" viewBox="0 0 24 24">
-      <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 17.5V5l11-2v12.5"/>
-        <ellipse cx="6.5" cy="17.5" rx="2.75" ry="2.25"/>
-        <ellipse cx="17.5" cy="15.5" rx="2.75" ry="2.25"/>
-        <path d="M9 9l11-2"/>
-      </g>
-    </symbol>
     <symbol id="i-pin" viewBox="0 0 24 24">
       <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
         <path d="M12 21.5s-6.5-6.2-6.5-11.25a6.5 6.5 0 0 1 13 0C18.5 15.3 12 21.5 12 21.5z"/>
@@ -98,10 +70,10 @@
         <ul class="nav__list">
           <li><a href="#pint">The pint</a></li>
           <li><a href="#whats-on">What’s on</a></li>
+          <li><a href="#walls">On the walls</a></li>
           <li><a href="#outside">Outside</a></li>
           <li><a href="#food">Food</a></li>
           <li><a href="#history">Since 1839</a></li>
-          <li><a href="#reviews">Reviews</a></li>
           <li><a href="#find-us">Find us</a></li>
         </ul>
         <p class="nav__foot">225 Camberwell New Road · Open 12–midnight, every day</p>
@@ -111,19 +83,19 @@
 
   <main id="main">
 
-    <!-- Hero -->
+    <!-- Hero: the lyric wall -->
     <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="wrap hero__grid">
-        <div class="fascia" data-settle style="--delay: .1s">
-          <h1 class="fascia__name" id="hero-title" data-settle="blur" style="--delay: .45s">Hennessy’s</h1>
-          <p class="fascia__place" data-settle style="--delay: 1.1s"><span>Camberwell</span></p>
-          <p class="fascia__hours" data-settle style="--delay: 1.5s">Open 12–midnight, every day</p>
-          <p class="status status--chip" data-status data-settle style="--delay: 2.6s"><span class="status__dot" aria-hidden="true"></span><span class="status__text">Open 12–midnight</span></p>
-        </div>
-
-        <figure class="slot slot--hero" data-photo="photos/frontage.jpg" data-photo-eager style="--ratio: 4 / 3; --delay: .8s" data-settle>
-          <img alt="The red frontage of Hennessy’s on the corner, with its hanging sign and lanterns" width="728" height="710">
-        </figure>
+      <img class="hero__wall" src="photos/lyric-wall.jpg" alt="" width="1080" height="1080">
+      <div class="hero__inner">
+        <img class="hero__crest" data-optional src="photos/crest.png" alt="The Hennessy’s crest" width="312" height="312" data-settle style="--delay: .2s">
+        <h1 class="hero__name" id="hero-title" data-settle="blur" style="--delay: .5s">Hennessy’s</h1>
+        <p class="hero__place" data-settle style="--delay: 1.1s"><span>Camberwell</span></p>
+        <p class="hero__quote" data-settle style="--delay: 1.6s">“A wall full of stories, songs &amp; a little bit of Irish soul.”</p>
+        <p class="hero__songs" data-settle style="--delay: 1.9s">From “Galway Girl” to “The Irish Rover”</p>
+        <p class="hero__hours" data-settle style="--delay: 2.4s">
+          <span class="status status--chip" data-status><span class="status__dot" aria-hidden="true"></span><span class="status__text">Open 12–midnight</span></span>
+          <span class="hero__every">Open 12–midnight, every day</span>
+        </p>
       </div>
     </section>
 
@@ -142,86 +114,96 @@
         <div class="pint__copy">
           <p class="kicker" data-settle>The pint</p>
           <h2 class="title" id="pint-title" data-settle>The Guinness is what we’re known for.</h2>
-          <p class="price" data-settle="blur">
-            <span class="price__figure">£6</span>
-            <span class="price__unit">a pint of Guinness</span>
-            <span class="price__rule" aria-hidden="true"></span>
-          </p>
-          <p class="lede" data-settle>Friendly staff, a proper local feel, and a pint of Guinness for six pounds. Give it a minute to settle. It’s worth the wait.</p>
+          <p class="lede" data-settle>Friendly staff, a proper local feel, and a pint worth waiting for. Give it a minute to settle.</p>
         </div>
-
-        <figure class="slot slot--pint" data-photo="photos/postcards.jpg" style="--ratio: 4 / 5" data-settle>
-          <img alt="Old postcards of Ireland on the wall at Hennessy’s" width="1080" height="1440">
-        </figure>
+        <p class="price" data-settle="blur">
+          <span class="price__figure">£6</span>
+          <span class="price__unit">a pint of Guinness</span>
+          <span class="price__rule" aria-hidden="true"></span>
+        </p>
       </div>
     </section>
 
     <!-- What's on -->
-    <section class="whatson section section--light" id="whats-on" aria-labelledby="whatson-title">
-      <div class="wrap">
+    <section class="whatson section section--paper" id="whats-on" aria-labelledby="whatson-title">
+      <div class="wrap whatson__grid">
         <div class="section-head">
           <p class="kicker" data-settle>What’s on</p>
-          <h2 class="title" id="whatson-title" data-settle>The week at Hennessy’s</h2>
-          <p class="lede" data-settle>Live music on Saturdays. Darts and pool every day, and the sport on the TV.</p>
+          <h2 class="title" id="whatson-title" data-settle>Your Mondays and Fridays, sorted.</h2>
+          <p class="lede" data-settle>Quiz night every Monday, live music every Friday, and darts, pool and the sport on the TV any day of the week. Round up your friends and grab a drink.</p>
+          <p class="tonight" data-tonight hidden></p>
         </div>
 
-        <div class="whatson__grid">
-          <div class="whatson__week">
-            <div class="week-head" data-settle>
-              <p class="week-head__next" data-next-music>Live music every <strong>Saturday</strong></p>
-              <ul class="legend" aria-label="Key">
-                <li><svg aria-hidden="true"><use href="#i-tv"/></svg>Sport on TV</li>
-                <li><svg aria-hidden="true"><use href="#i-darts"/></svg>Darts</li>
-                <li><svg aria-hidden="true"><use href="#i-pool"/></svg>Pool</li>
-                <li><svg aria-hidden="true"><use href="#i-music"/></svg>Live music</li>
-              </ul>
-            </div>
-
-            <!-- Filled in by js/main.js as a rolling week from today. This list is the fallback. -->
-            <ol class="week" data-week>
-              <li class="day"><p class="day__when"><span class="day__rel">Monday</span></p><p class="day__on">Sport on TV, darts, pool</p></li>
-              <li class="day"><p class="day__when"><span class="day__rel">Tuesday</span></p><p class="day__on">Sport on TV, darts, pool</p></li>
-              <li class="day"><p class="day__when"><span class="day__rel">Wednesday</span></p><p class="day__on">Sport on TV, darts, pool</p></li>
-              <li class="day"><p class="day__when"><span class="day__rel">Thursday</span></p><p class="day__on">Sport on TV, darts, pool</p></li>
-              <li class="day"><p class="day__when"><span class="day__rel">Friday</span></p><p class="day__on">Sport on TV, darts, pool</p></li>
-              <li class="day day--music"><p class="day__when"><span class="day__rel">Saturday</span></p><p class="day__on">Live music, sport on TV, darts, pool</p></li>
-              <li class="day"><p class="day__when"><span class="day__rel">Sunday</span></p><p class="day__on">Sport on TV, darts, pool</p></li>
+        <!-- From the pub's Instagram. The Friday line-up is for October 2026: past dates drop off, and the list goes when they've all passed. -->
+        <div class="bill" data-settle="pin">
+          <p class="bill__head">At Hennessy’s</p>
+          <ul class="bill__list">
+            <li class="bill__item" data-day="1">
+              <p class="bill__when">Every Monday</p>
+              <p class="bill__what">Quiz night</p>
+              <p class="bill__note">From 7pm. Gather your team, test your knowledge and see who takes the crown.</p>
+            </li>
+            <li class="bill__item" data-day="5">
+              <p class="bill__when">Every Friday</p>
+              <p class="bill__what">Live music</p>
+              <p class="bill__note">From 7:30pm. Great tunes, cold drinks and a brilliant atmosphere.</p>
+            </li>
+            <li class="bill__item">
+              <p class="bill__when">Every day</p>
+              <p class="bill__what">Darts, pool &amp; sport</p>
+              <p class="bill__note">The sport on the TV, and a board and a table when you fancy a game.</p>
+            </li>
+          </ul>
+          <div class="lineup" data-lineup>
+            <p class="lineup__head">Friday line-up</p>
+            <ol class="lineup__list">
+              <li data-date="2026-10-09"><span>Fri 9 Oct</span><span>Sean Harrington</span></li>
+              <li data-date="2026-10-16"><span>Fri 16 Oct</span><span>Angels Can Dance</span></li>
+              <li data-date="2026-10-23"><span>Fri 23 Oct</span><span>Paul Bowen</span></li>
+              <li data-date="2026-10-30"><span>Fri 30 Oct</span><span>Sean Harrington</span></li>
             </ol>
-
-            <p class="week__note" data-settle>Open 12–midnight every day. Keep up with the pub on Instagram at <a href="https://www.instagram.com/hennessyscamberwell/" target="_blank" rel="noopener">@hennessyscamberwell</a>.</p>
           </div>
-
-          <figure class="slot slot--bar" data-photo="photos/lyric-wall.jpg" style="--ratio: 3 / 2" data-settle>
-            <img alt="Song lyrics handwritten across the embossed wall inside Hennessy’s" width="1080" height="1080">
-          </figure>
+          <p class="bill__foot">Open 12–midnight, every day</p>
         </div>
       </div>
     </section>
 
-    <!-- Outside -->
-    <section class="outside section section--sun" id="outside" aria-labelledby="outside-title">
-      <div class="outside__glow" aria-hidden="true"></div>
-      <div class="wrap outside__grid">
-        <figure class="slot slot--outside" data-photo="photos/outside.jpg" style="--ratio: 3 / 2" data-settle>
-          <img alt="People at the tables outside Hennessy’s under the lanterns and festoon lights" width="1080" height="1440">
+    <!-- On the walls -->
+    <section class="walls section section--light" id="walls" aria-labelledby="walls-title">
+      <div class="wrap walls__grid">
+        <figure class="print print--left" data-photo data-settle="pin">
+          <img src="photos/postcards.jpg" alt="Old postcards of Ireland pinned to the wall at Hennessy’s" width="1080" height="1440" loading="lazy">
+          <figcaption>Postcards from Connemara</figcaption>
         </figure>
+        <div class="walls__copy">
+          <p class="kicker" data-settle>On the walls</p>
+          <h2 class="title" id="walls-title" data-settle>Some stories are too beautiful to stay hidden in a biscuit tin.</h2>
+          <p class="lede" data-settle>These postcards belonged to an old lady in Connemara, kept for decades in an old tin box: little pieces of Ireland, full of memories, handwriting, journeys and homesickness. Now they’ve made their way across the sea to a new home on our walls, to be admired over a pint, good music and great company.</p>
+        </div>
+      </div>
+    </section>
 
+    <section class="lyrics" aria-label="The lyric wall">
+      <div class="lyrics__wall" aria-hidden="true"></div>
+      <div class="wrap lyrics__inner">
+        <p class="lyrics__line" data-settle>Every lyric on this wall means something. The songs we grew up with, the ones we sing after a few pints, and the tunes that bring everyone together.</p>
+        <p class="lyrics__ask" data-settle>What song would you add to our wall?</p>
+      </div>
+    </section>
+
+    <!-- Outside -->
+    <section class="outside section section--paper" id="outside" aria-labelledby="outside-title">
+      <div class="wrap outside__grid">
         <div class="outside__copy">
           <p class="kicker" data-settle>Outside</p>
           <h2 class="title" id="outside-title" data-settle>A proper sun trap.</h2>
-          <p class="lede" data-settle>There’s seating outside that catches the sun. On a bright day, take your pint out there.</p>
-
-          <div class="sun" data-sun data-settle>
-            <div class="sun__head">
-              <p class="sun__label">Sunset in Camberwell today</p>
-              <p class="sun__time" data-sun-set>–</p>
-            </div>
-            <svg class="sun__arc" viewBox="0 0 320 150" role="img" aria-labelledby="sun-arc-title" data-sun-arc>
-              <title id="sun-arc-title">Today’s daylight, from sunrise to sunset, with the part after opening at 12pm marked</title>
-            </svg>
-            <p class="sun__note" data-sun-note>Sun-trap seating outside, open from 12pm.</p>
-          </div>
+          <p class="lede" data-settle>Tables out front under the lanterns and the festoon lights. The perfect excuse for an afternoon drink in the sun.</p>
+          <p class="sunset" data-sunset data-settle hidden></p>
         </div>
+        <figure class="print print--right" data-photo data-settle="pin">
+          <img src="photos/outside.jpg" alt="People at the tables outside Hennessy’s under the lanterns and festoon lights" width="1080" height="1440" loading="lazy">
+          <figcaption>Out front</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -231,22 +213,26 @@
         <div class="food__copy">
           <p class="kicker" data-settle>Food</p>
           <h2 class="title" id="food-title" data-settle>Pub classics</h2>
-          <p class="lede" data-settle>Proper pub food to go with the pint.</p>
-
-          <!-- PLACEHOLDER: no menu was found for Hennessy's. The five dishes come from data/menu.json and are samples for this demo only. -->
-          <ol class="menu" data-menu></ol>
-          <p class="menu__note" data-settle>Ask at the bar for what’s cooking.</p>
+          <p class="lede" data-settle>Proper pub food to go with the pint. Ask at the bar for what’s cooking.</p>
         </div>
+        <!-- PLACEHOLDER: no menu was found for Hennessy's. The five dishes come from data/menu.json and are samples for this demo only. -->
+        <ol class="menu" data-menu></ol>
       </div>
     </section>
 
     <!-- History -->
     <section class="history section section--paper" id="history" aria-labelledby="history-title">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="kicker" data-settle>The corner since 1839</p>
-          <h2 class="title" id="history-title" data-settle>Four names, one corner.</h2>
-          <p class="lede" data-settle>There’s been a pub at 225 Camberwell New Road since around 1839. The name over the door has changed a few times since.</p>
+      <div class="wrap history__grid">
+        <div class="history__side">
+          <div class="section-head">
+            <p class="kicker" data-settle>The corner since 1839</p>
+            <h2 class="title" id="history-title" data-settle>Four names, one corner.</h2>
+            <p class="lede" data-settle>There’s been a pub at 225 Camberwell New Road since around 1839. The name over the door has changed a few times since.</p>
+          </div>
+          <figure class="print print--front" data-photo data-settle="pin">
+            <img src="photos/frontage.jpg" alt="The red frontage of Hennessy’s on the corner, with its hanging sign and lanterns" width="728" height="710" loading="lazy">
+            <figcaption>The corner today</figcaption>
+          </figure>
         </div>
 
         <ol class="timeline" data-timeline>
@@ -279,25 +265,20 @@
       </div>
     </section>
 
-    <!-- Reviews -->
-    <section class="reviews section section--dark" id="reviews" aria-labelledby="reviews-title">
-      <div class="wrap">
-        <div class="section-head reviews__head">
-          <p class="kicker" data-settle>Reviews</p>
-          <h2 class="visually-hidden" id="reviews-title">Reviews</h2>
-          <div class="rating" data-settle>
-            <p class="rating__score">4.2</p>
-            <div class="rating__detail">
-              <div class="stars" role="img" aria-label="Rated 4.2 out of 5 on Google">
-                <span class="stars__row stars__row--base" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
-                <span class="stars__row stars__row--fill" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
-              </div>
-              <p class="rating__source">on Google</p>
+    <!-- Google rating -->
+    <section class="rating-band" id="reviews" aria-label="Google rating">
+      <div class="wrap rating-band__inner">
+        <div class="rating" data-settle>
+          <p class="rating__score">4.2</p>
+          <div class="rating__detail">
+            <div class="stars" role="img" aria-label="Rated 4.2 out of 5 on Google">
+              <span class="stars__row stars__row--base" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
+              <span class="stars__row stars__row--fill" aria-hidden="true"><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg><svg><use href="#i-star"/></svg></span>
             </div>
+            <p class="rating__source">on Google</p>
           </div>
         </div>
-
-        <p class="reviews__more" data-settle>
+        <p data-settle>
           <a class="link-arrow" href="https://www.google.com/maps/search/?api=1&amp;query=Hennessy%27s%2C+225+Camberwell+New+Road%2C+London+SE5+0TH" target="_blank" rel="noopener">Read the reviews on Google<svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </p>
       </div>
@@ -305,57 +286,55 @@
 
     <!-- Find us -->
     <section class="find section section--light" id="find-us" aria-labelledby="find-title">
-      <div class="wrap">
-        <div class="find__grid">
-          <div class="find__main">
-            <p class="kicker" data-settle>Find us</p>
-            <h2 class="title" id="find-title" data-settle>225 Camberwell New Road</h2>
-            <address class="find__address" data-settle>
-              Hennessy’s<br>
-              225 Camberwell New Road<br>
-              London SE5 0TH
-            </address>
-            <div class="find__actions" data-settle>
-              <a class="btn btn--solid" href="https://www.google.com/maps/dir/?api=1&amp;destination=Hennessy%27s%2C+225+Camberwell+New+Road%2C+London+SE5+0TH" target="_blank" rel="noopener">
-                <svg aria-hidden="true"><use href="#i-pin"/></svg>Get directions
-              </a>
-              <button class="btn btn--line" type="button" data-copy="Hennessy’s, 225 Camberwell New Road, London SE5 0TH">
-                <svg aria-hidden="true"><use href="#i-copy"/></svg>Copy address
-              </button>
-            </div>
+      <div class="wrap find__grid">
+        <div class="find__main">
+          <p class="kicker" data-settle>Find us</p>
+          <h2 class="title" id="find-title" data-settle>225 Camberwell New Road</h2>
+          <address class="find__address" data-settle>
+            Hennessy’s<br>
+            225 Camberwell New Road<br>
+            London SE5 0TH
+          </address>
+          <div class="find__actions" data-settle>
+            <a class="btn btn--solid" href="https://www.google.com/maps/dir/?api=1&amp;destination=Hennessy%27s%2C+225+Camberwell+New+Road%2C+London+SE5+0TH" target="_blank" rel="noopener">
+              <svg aria-hidden="true"><use href="#i-pin"/></svg>Get directions
+            </a>
+            <button class="btn btn--line" type="button" data-copy="Hennessy’s, 225 Camberwell New Road, London SE5 0TH">
+              <svg aria-hidden="true"><use href="#i-copy"/></svg>Copy address
+            </button>
+          </div>
+        </div>
+
+        <div class="find__cards">
+          <div class="card" data-settle>
+            <h3 class="card__title">Opening hours</h3>
+            <p class="status status--line" data-status><span class="status__dot" aria-hidden="true"></span><span class="status__text">Open 12–midnight</span></p>
+            <ul class="hours" data-hours>
+              <li><span>Monday</span><span>12pm – midnight</span></li>
+              <li><span>Tuesday</span><span>12pm – midnight</span></li>
+              <li><span>Wednesday</span><span>12pm – midnight</span></li>
+              <li><span>Thursday</span><span>12pm – midnight</span></li>
+              <li><span>Friday</span><span>12pm – midnight</span></li>
+              <li><span>Saturday</span><span>12pm – midnight</span></li>
+              <li><span>Sunday</span><span>12pm – midnight</span></li>
+            </ul>
           </div>
 
-          <div class="find__cards">
-            <div class="card" data-settle>
-              <h3 class="card__title">Opening hours</h3>
-              <p class="status status--line" data-status><span class="status__dot" aria-hidden="true"></span><span class="status__text">Open 12–midnight</span></p>
-              <ul class="hours" data-hours>
-                <li><span>Monday</span><span>12pm – midnight</span></li>
-                <li><span>Tuesday</span><span>12pm – midnight</span></li>
-                <li><span>Wednesday</span><span>12pm – midnight</span></li>
-                <li><span>Thursday</span><span>12pm – midnight</span></li>
-                <li><span>Friday</span><span>12pm – midnight</span></li>
-                <li><span>Saturday</span><span>12pm – midnight</span></li>
-                <li><span>Sunday</span><span>12pm – midnight</span></li>
-              </ul>
-            </div>
+          <div class="card" data-settle>
+            <h3 class="card__title">Buses</h3>
+            <ul class="buses">
+              <li><span class="route">36</span></li>
+              <li><span class="route">185</span></li>
+              <li><span class="route">436</span></li>
+              <li><span class="route route--night">N136</span><span class="route__note">night</span></li>
+            </ul>
+          </div>
 
-            <div class="card" data-settle>
-              <h3 class="card__title">Buses</h3>
-              <ul class="buses">
-                <li><span class="route">36</span></li>
-                <li><span class="route">185</span></li>
-                <li><span class="route">436</span></li>
-                <li><span class="route route--night">N136</span><span class="route__note">night</span></li>
-              </ul>
-            </div>
-
-            <div class="card" data-settle>
-              <h3 class="card__title">Instagram</h3>
-              <a class="insta" href="https://www.instagram.com/hennessyscamberwell/" target="_blank" rel="noopener">
-                <svg aria-hidden="true"><use href="#i-insta"/></svg>@hennessyscamberwell
-              </a>
-            </div>
+          <div class="card" data-settle>
+            <h3 class="card__title">Instagram</h3>
+            <a class="insta" href="https://www.instagram.com/hennessyscamberwell/" target="_blank" rel="noopener">
+              <svg aria-hidden="true"><use href="#i-insta"/></svg>@hennessyscamberwell
+            </a>
           </div>
         </div>
       </div>
@@ -364,6 +343,7 @@
 
   <footer class="foot">
     <div class="wrap foot__inner">
+      <img class="foot__crest" data-optional src="photos/crest.png" alt="" width="312" height="312" loading="lazy">
       <p class="foot__name">Hennessy’s</p>
       <p class="foot__place"><span>Camberwell</span></p>
       <p class="foot__line">225 Camberwell New Road, London SE5 0TH</p>

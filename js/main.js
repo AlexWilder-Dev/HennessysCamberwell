@@ -8,9 +8,6 @@
   var LNG = -0.0985;
   var OPEN_HOUR = 12;  // 12pm to midnight, seven days
 
-  var DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
   /* ---------- London time ---------- */
 
   var londonFmt = new Intl.DateTimeFormat('en-GB', {
@@ -26,13 +23,8 @@
     return { y: p.year, m: p.month, d: p.day, h: p.hour % 24, min: p.minute, dow: dow };
   }
 
-  // The instant at which it is hh:00 on a given London calendar day.
-  function londonInstant(y, m, d, hh) {
-    var guess = Date.UTC(y, m - 1, d, hh);
-    var offset = london(new Date(guess)).h - hh;
-    if (offset > 12) offset -= 24;
-    if (offset < -12) offset += 24;
-    return new Date(guess - offset * 3600000);
+  function isoDay(t) {
+    return t.y + '-' + String(t.m).padStart(2, '0') + '-' + String(t.d).padStart(2, '0');
   }
 
   var timeFmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: 'numeric', minute: '2-digit', hour12: true });
@@ -69,7 +61,7 @@
         if (!el.style.getPropertyValue('--delay')) el.style.setProperty('--delay', (i * 0.16).toFixed(2) + 's');
         el.classList.add('is-settled');
         settleObserver.unobserve(el);
-        if (el.hasAttribute('data-week') || el.hasAttribute('data-menu')) staggerChildren(el);
+        if (el.hasAttribute('data-menu')) staggerChildren(el);
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
   }
@@ -89,15 +81,15 @@
 
   function initBar() {
     var bar = document.querySelector('[data-bar]');
-    var hero = document.querySelector('.fascia');
+    var name = document.querySelector('.hero__name');
     var toggle = document.querySelector('[data-nav-toggle]');
     var nav = document.querySelector('[data-nav]');
     if (!bar) return;
 
-    if (hero && 'IntersectionObserver' in window) {
+    if (name && 'IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
         bar.classList.toggle('is-solid', !entries[0].isIntersecting);
-      }, { rootMargin: '-56px 0px 0px 0px', threshold: 0 }).observe(hero.querySelector('.fascia__name') || hero);
+      }, { rootMargin: '-56px 0px 0px 0px', threshold: 0 }).observe(name);
     } else {
       bar.classList.add('is-solid');
     }
@@ -109,7 +101,6 @@
       toggle.setAttribute('aria-expanded', String(open));
       nav.classList.toggle('is-open', open);
       document.documentElement.classList.toggle('nav-open', open);
-      bar.classList.toggle('is-menu', open);
     }
     toggle.addEventListener('click', function () {
       setOpen(toggle.getAttribute('aria-expanded') !== 'true');
@@ -124,84 +115,62 @@
   }
 
   /* ---------- Photos ---------- */
-  // Each photo names a file in photos/ and fades in once loaded. If the file is missing, the figure is removed.
+  // A photo that fails to load is removed, so the page never shows an empty frame.
 
   function initPhotos() {
-    var slots = document.querySelectorAll('[data-photo]');
-    function load(fig) {
-      var img = fig.querySelector('img');
-      var src = fig.getAttribute('data-photo');
-      if (!img || !src) return;
-      var probe = new Image();
-      probe.onload = function () {
-        img.src = src;
-        var show = function () { fig.classList.add('has-photo'); };
-        if (img.decode) img.decode().then(show, show); else show();
-      };
-      probe.onerror = function () { fig.remove(); };
-      probe.src = src;
-    }
-    if (!('IntersectionObserver' in window)) { slots.forEach(load); return; }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) { load(e.target); io.unobserve(e.target); }
-      });
-    }, { rootMargin: '600px 0px' });
-    slots.forEach(function (fig) {
-      if (fig.hasAttribute('data-photo-eager')) load(fig); else io.observe(fig);
+    document.querySelectorAll('img[data-optional]').forEach(function (img) {
+      var show = function () { img.classList.add('is-loaded'); };
+      if (img.complete && img.naturalWidth) show();
+      else if (img.complete) img.remove();
+      else {
+        img.addEventListener('load', show);
+        img.addEventListener('error', function () { img.remove(); });
+      }
+    });
+    document.querySelectorAll('[data-photo] img').forEach(function (img) {
+      var fig = img.closest('[data-photo]');
+      var drop = function () { fig.remove(); };
+      if (img.complete && !img.naturalWidth && img.currentSrc) drop();
+      else img.addEventListener('error', drop);
     });
   }
 
-  /* ---------- What's on: a rolling week from today ---------- */
+  /* ---------- What's on ---------- */
+  // Quiz night is on Mondays, live music on Fridays. The Friday line-up is in the HTML.
 
-  var SHORT_MONTHS = MONTHS.map(function (m) { return m.slice(0, 3); });
+  function initWhatsOn() {
+    var t = london();
+    var today = isoDay(t);
+    var acts = {};
 
-  function icon(id) {
-    return '<svg aria-hidden="true"><use href="#' + id + '"/></svg>';
-  }
-
-  function initWeek() {
-    var list = document.querySelector('[data-week]');
-    var next = document.querySelector('[data-next-music]');
-    if (!list) return;
-    var today = london();
-    var base = Date.UTC(today.y, today.m - 1, today.d, 12);
-    var html = '';
-    var nextSat = null;
-
-    for (var i = 0; i < 7; i++) {
-      var day = new Date(base + i * 86400000);
-      var dow = day.getUTCDay();
-      var isSat = dow === 6;
-      if (isSat && nextSat === null) nextSat = { offset: i, date: day };
-      var rel = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : DAYS[dow];
-      var date = DAYS[dow].slice(0, 3) + ' ' + day.getUTCDate() + ' ' + SHORT_MONTHS[day.getUTCMonth()];
-      var spoken = (isSat ? 'Live music, ' : '') + 'sport on TV, darts and pool';
-
-      html += '<li class="day' + (isSat ? ' day--music' : '') + (i === 0 ? ' is-today' : '') + '">' +
-        '<p class="day__when"><span class="day__rel">' + rel + '</span><span class="day__date">' + date + '</span></p>' +
-        '<p class="day__on">' +
-          (isSat ? '<span class="day__feature">' + icon('i-music') + 'Live music</span>' : '') +
-          '<span class="day__icons" aria-hidden="true">' + icon('i-tv') + icon('i-darts') + icon('i-pool') + '</span>' +
-          '<span class="visually-hidden">' + spoken + '</span>' +
-        '</p>' +
-      '</li>';
+    var lineup = document.querySelector('[data-lineup]');
+    if (lineup) {
+      var left = 0;
+      lineup.querySelectorAll('[data-date]').forEach(function (li) {
+        var date = li.getAttribute('data-date');
+        var spans = li.querySelectorAll('span');
+        if (spans.length > 1) acts[date] = spans[1].textContent.trim();
+        var past = date < today;
+        li.hidden = past;
+        if (!past) left++;
+      });
+      lineup.hidden = left === 0;
     }
-    list.innerHTML = html;
 
-    if (next && nextSat) {
-      var when;
-      if (nextSat.offset === 0) when = 'today';
-      else if (nextSat.offset === 1) when = 'tomorrow';
-      else when = 'Saturday ' + nextSat.date.getUTCDate() + ' ' + MONTHS[nextSat.date.getUTCMonth()];
-      next.innerHTML = 'Next live music: <strong>' + when + '</strong>';
-    }
+    var item = document.querySelector('.bill__item[data-day="' + t.dow + '"]');
+    var note = document.querySelector('[data-tonight]');
+    if (!item) return;
+    item.classList.add('is-tonight');
+    if (!note) return;
+    if (t.dow === 1) note.textContent = 'Tonight: quiz night from 7pm';
+    if (t.dow === 5) note.textContent = 'Tonight: live music from 7:30pm' + (acts[today] ? ' with ' + acts[today] : '');
+    note.hidden = !note.textContent;
   }
 
   /* ---------- Outside: today's sunset over Camberwell ---------- */
-  // Sunrise and sunset from the standard solar position formulas (accurate to a minute or two).
+  // Sunset from the standard solar position formulas (accurate to a minute or two).
 
-  function sunTimes(dateUtcNoon, lat, lng) {
+  function sunset(dateUtcNoon, lat, lng) {
     var rad = Math.PI / 180, dayMs = 86400000, J1970 = 2440588, J2000 = 2451545;
     var e = rad * 23.4397;
     var d = dateUtcNoon.valueOf() / dayMs - 0.5 + J1970 - J2000;
@@ -212,113 +181,25 @@
     var C = rad * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M));
     var L = M + C + rad * 102.9372 + Math.PI;
     var dec = Math.asin(Math.sin(e) * Math.sin(L));
-    var Jnoon = J2000 + ds + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * L);
     var w = Math.acos((Math.sin(rad * -0.833) - Math.sin(phi) * Math.sin(dec)) / (Math.cos(phi) * Math.cos(dec)));
     var a = 0.0009 + (w + lw) / (2 * Math.PI) + n;
     var Jset = J2000 + a + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * L);
-    var Jrise = Jnoon - (Jset - Jnoon);
-    var toDate = function (j) { return new Date((j + 0.5 - J1970) * dayMs); };
-    return { rise: toDate(Jrise), set: toDate(Jset) };
+    return new Date((Jset + 0.5 - J1970) * dayMs);
   }
 
-  function duration(ms) {
-    var mins = Math.max(0, Math.round(ms / 60000));
-    var h = Math.floor(mins / 60), m = mins % 60;
-    var parts = [];
-    if (h) parts.push(h + (h === 1 ? ' hour' : ' hours'));
-    if (m || !h) parts.push(m + (m === 1 ? ' minute' : ' minutes'));
-    return parts.join(' ');
-  }
-
-  function initSun() {
-    var box = document.querySelector('[data-sun]');
-    if (!box) return;
-    var svg = box.querySelector('[data-sun-arc]');
-    var setEl = box.querySelector('[data-sun-set]');
-    var noteEl = box.querySelector('[data-sun-note]');
-
+  function initSunset() {
+    var el = document.querySelector('[data-sunset]');
+    if (!el) return;
     var now = new Date();
     var t = london(now);
-    var sun = sunTimes(new Date(Date.UTC(t.y, t.m - 1, t.d, 12)), LAT, LNG);
-    var doors = londonInstant(t.y, t.m, t.d, OPEN_HOUR);
-    var tomorrow = sunTimes(new Date(Date.UTC(t.y, t.m - 1, t.d + 1, 12)), LAT, LNG);
-
-    setEl.textContent = clock(sun.set);
-    if (now < doors) {
-      noteEl.textContent = 'Doors open at 12pm, with ' + duration(sun.set - doors) + ' of daylight to follow.';
-    } else if (now < sun.set) {
-      noteEl.textContent = 'Daylight for another ' + duration(sun.set - now) + '. Time for one outside.';
+    var set = sunset(new Date(Date.UTC(t.y, t.m - 1, t.d, 12)), LAT, LNG);
+    if (now < set) {
+      el.textContent = 'Sun’s up until ' + clock(set) + ' today';
     } else {
-      noteEl.textContent = 'The sun’s down for today. Tomorrow it sets at ' + clock(tomorrow.set) + '.';
+      var next = sunset(new Date(Date.UTC(t.y, t.m - 1, t.d + 1, 12)), LAT, LNG);
+      el.textContent = 'Sunset tomorrow at ' + clock(next);
     }
-
-    // Draw the day as an arc: sunrise on the left, sunset on the right
-    var X0 = 24, X1 = 296, HORIZON = 118, PEAK = 26;
-    var span = sun.set - sun.rise;
-    function pt(f) {
-      return [X0 + f * (X1 - X0), HORIZON - (HORIZON - PEAK) * Math.sin(Math.PI * f)];
-    }
-    function arc(f0, f1) {
-      var d = '';
-      for (var i = 0; i <= 48; i++) {
-        var p = pt(f0 + (f1 - f0) * i / 48);
-        d += (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1);
-      }
-      return d;
-    }
-    var fDoors = Math.min(1, Math.max(0, (doors - sun.rise) / span));
-    var fNow = (now - sun.rise) / span;
-    var doorsPt = pt(fDoors);
-    var ns = 'http://www.w3.org/2000/svg';
-    function el(name, attrs, text) {
-      var node = document.createElementNS(ns, name);
-      for (var k in attrs) node.setAttribute(k, attrs[k]);
-      if (text) node.textContent = text;
-      svg.appendChild(node);
-      return node;
-    }
-
-    el('line', { class: 'horizon', x1: 0, x2: 320, y1: HORIZON, y2: HORIZON });
-    el('path', { class: 'path', d: arc(0, 1) });
-    var open = el('path', { class: 'open', d: arc(fDoors, 1) });
-    el('line', { class: 'tick', x1: doorsPt[0], x2: doorsPt[0], y1: doorsPt[1] + 6, y2: HORIZON });
-    el('text', { x: X0, y: HORIZON + 20, 'text-anchor': 'middle' }, clock(sun.rise));
-    el('text', { x: X1, y: HORIZON + 20, 'text-anchor': 'middle' }, clock(sun.set));
-    el('text', { x: doorsPt[0], y: HORIZON + 20, 'text-anchor': 'middle', class: 'label-open' }, 'Doors 12pm');
-    el('text', { x: X0, y: HORIZON + 34, 'text-anchor': 'middle' }, 'sunrise');
-    el('text', { x: X1, y: HORIZON + 34, 'text-anchor': 'middle' }, 'sunset');
-
-    var up = fNow > 0 && fNow < 1;
-    if (!up) return;
-    var halo = el('circle', { class: 'halo', r: 15, cx: pt(0)[0], cy: pt(0)[1] });
-    var disc = el('circle', { class: 'disc', r: 6.5, cx: pt(0)[0], cy: pt(0)[1] });
-
-    function place(f) {
-      var p = pt(f);
-      disc.setAttribute('cx', p[0].toFixed(1)); disc.setAttribute('cy', p[1].toFixed(1));
-      halo.setAttribute('cx', p[0].toFixed(1)); halo.setAttribute('cy', p[1].toFixed(1));
-    }
-
-    // The sun drifts up to where it is now, slowly, once the panel is in view
-    var len = open.getTotalLength ? open.getTotalLength() : 0;
-    if (reduceMotion || !('IntersectionObserver' in window)) { place(fNow); return; }
-    place(0);
-    if (len) { open.style.strokeDasharray = len; open.style.strokeDashoffset = len; }
-    var io = new IntersectionObserver(function (entries) {
-      if (!entries[0].isIntersecting) return;
-      io.disconnect();
-      var start = null, DURATION = 4200;
-      function step(ts) {
-        if (start === null) start = ts;
-        var k = Math.min(1, (ts - start) / DURATION);
-        var eased = 1 - Math.pow(1 - k, 3);
-        place(fNow * eased);
-        if (len) open.style.strokeDashoffset = (len * (1 - eased)).toFixed(1);
-        if (k < 1) requestAnimationFrame(step);
-      }
-      setTimeout(function () { requestAnimationFrame(step); }, 600);
-    }, { threshold: 0.4 });
-    io.observe(svg);
+    el.hidden = false;
   }
 
   /* ---------- Food: sample menu ---------- */
@@ -345,13 +226,7 @@
         });
         settle(list);
       })
-      .catch(function () {
-        var li = document.createElement('li');
-        li.className = 'menu__error';
-        li.textContent = 'The menu couldn’t be loaded. Ask at the bar.';
-        list.appendChild(li);
-        list.classList.add('is-settled');
-      });
+      .catch(function () { list.remove(); });
   }
 
   /* ---------- History: the line pours down the timeline ---------- */
@@ -472,20 +347,6 @@
     toastTimer = setTimeout(function () { el.classList.remove('is-shown'); }, 2600);
   }
 
-  function initCopy() {
-    document.querySelectorAll('[data-copy]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var text = btn.getAttribute('data-copy');
-        var done = function () { toast('Address copied'); };
-        if (navigator.clipboard && window.isSecureContext) {
-          navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text) && done(); });
-        } else if (fallbackCopy(text)) {
-          done();
-        }
-      });
-    });
-  }
-
   function fallbackCopy(text) {
     var area = document.createElement('textarea');
     area.value = text;
@@ -500,6 +361,20 @@
     return ok;
   }
 
+  function initCopy() {
+    document.querySelectorAll('[data-copy]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var text = btn.getAttribute('data-copy');
+        var done = function () { toast('Address copied'); };
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(text).then(done, function () { if (fallbackCopy(text)) done(); });
+        } else if (fallbackCopy(text)) {
+          done();
+        }
+      });
+    });
+  }
+
   /* ---------- Start ---------- */
 
   function start() {
@@ -507,13 +382,13 @@
     setInterval(updateStatus, 30000);
     initBar();
     initPhotos();
-    initWeek();
-    initSun();
+    initWhatsOn();
+    initSunset();
     initMenu();
     initTimeline();
     initCascade();
     initCopy();
-    document.querySelectorAll('[data-settle], [data-week]').forEach(settle);
+    document.querySelectorAll('[data-settle]').forEach(settle);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
