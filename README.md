@@ -13,7 +13,7 @@ js/main.js          open-now status, navigation, what's on, sunset line, menu, t
 data/menu.json      sample menu (placeholder, see below)
 fonts/              Libre Caslon Display and Libre Caslon Text (SIL Open Font License)
 photos/             venue photography (see below)
-og.png              link preview image (1200 × 630)
+share.jpg           link preview image (1200 × 630)
 favicon.svg
 .github/workflows/  GitHub Pages deployment
 ```
@@ -38,7 +38,7 @@ No pint, bar or food photo has been posted, so those sections have none.
 - **What's on** follows the pub's latest Instagram post: quiz night every Monday from 7pm, live music every Friday from 7:30pm. The Friday line-up is in `index.html` under `data-lineup`, one line per date. Past dates drop off by themselves and the line-up disappears once they've all passed, so add the next month's acts there. On Mondays and Fridays the bill marks that night as "Tonight".
 - **Menu.** No menu was found, so `data/menu.json` holds five sample pub classics, marked as placeholder in the file. Replace them with the kitchen's dishes.
 - **Visit ping.** The script before `</body>` posts to `https://ntfy.sh/YOUR-NTFY-TOPIC`. Replace `YOUR-NTFY-TOPIC` with your topic. Add `?v=name` to a link to tag who opened it. Open the page once with `#me` on your own devices to stop pinging yourself.
-- **Link preview.** `og:url` and `og:image` point at `https://alexwilder-dev.github.io/HennessysCamberwell/`.
+- **Link preview.** `og:url` and `og:image` point at `https://alexwilder-dev.github.io/HennessysCamberwell/` (the capitals matter: the all-lowercase address is a 404). Instagram and other apps cache preview images by address, so if the image changes, give the file a new name and update the tags.
 - Other facts used: address, the pub's names since c.1839, open 12pm–midnight seven days, Guinness at £6 a pint, sport on TV, darts and pool, sun-trap outdoor seating, buses 36, 185, 436 and N136, Google rating 4.2. There is no phone number or website, so none is shown.
 - "Open now" and "Tonight" use London time. The sunset line is calculated for Camberwell; it's daylight, not the weather.
 - The page is marked `noindex` so the concept doesn't turn up in search results.
