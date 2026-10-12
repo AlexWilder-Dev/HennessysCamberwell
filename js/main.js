@@ -123,78 +123,133 @@
     desktop.addEventListener('change', function () { setOpen(false); });
   }
 
-  /* ---------- Photo slots ---------- */
-  // Each slot names a file in photos/. If the file is there it fades in; if not, the labelled slot stays.
+  /* ---------- Photos ---------- */
+  // Each photo names a file in photos/. It is shown once it loads; if the file isn't there, nothing is shown
+  // and the section lays out without it.
 
   function initPhotos() {
-    var slots = document.querySelectorAll('[data-photo]');
+    var figures = Array.prototype.slice.call(document.querySelectorAll('[data-photo]'));
     function load(fig) {
       var img = fig.querySelector('img');
       var src = fig.getAttribute('data-photo');
-      if (!img || !src) return;
-      var probe = new Image();
-      probe.onload = function () {
-        img.src = src;
-        var show = function () { fig.classList.add('has-photo'); };
+      if (!img || !src || fig._loading) return;
+      fig._loading = true;
+      // An image inside a hidden figure still loads, so the browser picks the right size from srcset
+      img.addEventListener('load', function () {
+        var show = function () {
+          fig.classList.add('is-loaded');
+          var host = fig.closest('[data-photo-host]');
+          if (host) host.classList.add('has-photo');
+          requestAnimationFrame(function () { requestAnimationFrame(function () { fig.classList.add('is-shown'); }); });
+        };
         if (img.decode) img.decode().then(show, show); else show();
-      };
-      probe.src = src;
+      }, { once: true });
+      img.addEventListener('error', function () { fig.remove(); }, { once: true });
+      var srcset = fig.getAttribute('data-srcset');
+      if (srcset) { img.sizes = fig.getAttribute('data-sizes') || '100vw'; img.srcset = srcset; }
+      img.src = src;
     }
-    if (!('IntersectionObserver' in window)) { slots.forEach(load); return; }
+
+    var lazy = figures.filter(function (fig) { return !fig.hasAttribute('data-eager'); });
+    figures.filter(function (fig) { return fig.hasAttribute('data-eager'); }).forEach(load);
+    if (!('IntersectionObserver' in window)) { lazy.forEach(load); return; }
+
+    // A hidden figure has no box to observe, so watch the section it sits in
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { load(e.target); io.unobserve(e.target); }
+        if (!e.isIntersecting) return;
+        lazy.forEach(function (fig) { if (e.target.contains(fig)) load(fig); });
+        io.unobserve(e.target);
       });
-    }, { rootMargin: '600px 0px' });
-    slots.forEach(function (fig) {
-      if (fig.hasAttribute('data-photo-eager')) load(fig); else io.observe(fig);
+    }, { rootMargin: '800px 0px' });
+    lazy.forEach(function (fig) { io.observe(fig.closest('section') || fig.parentNode); });
+  }
+
+  // The crest sits on the sign board only if its file loads
+  function initCrest() {
+    document.querySelectorAll('img[data-optional]').forEach(function (img) {
+      var show = function () { img.classList.add('is-loaded'); };
+      if (img.complete && img.naturalWidth) show();
+      else if (img.complete) img.remove();
+      else {
+        img.addEventListener('load', show);
+        img.addEventListener('error', function () { img.remove(); });
+      }
     });
   }
 
   /* ---------- What's on: a rolling week from today ---------- */
+  // From the pub's Instagram: quiz night every Monday from 7pm, live music every Friday from 7:30pm.
 
   var SHORT_MONTHS = MONTHS.map(function (m) { return m.slice(0, 3); });
+  var EVENTS = {
+    1: { name: 'Quiz night', time: 'from 7pm', icon: 'i-quiz' },
+    5: { name: 'Live music', time: 'from 7:30pm', icon: 'i-music', music: true }
+  };
 
   function icon(id) {
     return '<svg aria-hidden="true"><use href="#' + id + '"/></svg>';
   }
 
+  function isoDay(date) {
+    return date.getUTCFullYear() + '-' + String(date.getUTCMonth() + 1).padStart(2, '0') + '-' + String(date.getUTCDate()).padStart(2, '0');
+  }
+
+  function escapeHtml(text) {
+    return String(text).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+
+  // The Friday line-up lives in the HTML, so it can be edited without touching this script
+  function readLineup() {
+    var acts = {};
+    document.querySelectorAll('[data-lineup] [data-date]').forEach(function (li) {
+      var act = li.querySelector('.lineup__act');
+      if (act) acts[li.getAttribute('data-date')] = act.textContent.trim();
+    });
+    return acts;
+  }
+
   function initWeek() {
     var list = document.querySelector('[data-week]');
-    var next = document.querySelector('[data-next-music]');
     if (!list) return;
+    var acts = readLineup();
     var today = london();
     var base = Date.UTC(today.y, today.m - 1, today.d, 12);
     var html = '';
-    var nextSat = null;
 
     for (var i = 0; i < 7; i++) {
       var day = new Date(base + i * 86400000);
       var dow = day.getUTCDay();
-      var isSat = dow === 6;
-      if (isSat && nextSat === null) nextSat = { offset: i, date: day };
+      var ev = EVENTS[dow];
+      var act = ev && ev.music ? acts[isoDay(day)] : null;
       var rel = i === 0 ? 'Today' : i === 1 ? 'Tomorrow' : DAYS[dow];
       var date = DAYS[dow].slice(0, 3) + ' ' + day.getUTCDate() + ' ' + SHORT_MONTHS[day.getUTCMonth()];
-      var spoken = (isSat ? 'Live music, ' : '') + 'sport on TV, darts and pool';
+      var cls = 'day' + (ev ? ' day--event' : '') + (ev && ev.music ? ' day--music' : '') + (i === 0 ? ' is-today' : '');
 
-      html += '<li class="day' + (isSat ? ' day--music' : '') + (i === 0 ? ' is-today' : '') + '">' +
+      html += '<li class="' + cls + '">' +
         '<p class="day__when"><span class="day__rel">' + rel + '</span><span class="day__date">' + date + '</span></p>' +
-        '<p class="day__on">' +
-          (isSat ? '<span class="day__feature">' + icon('i-music') + 'Live music</span>' : '') +
-          '<span class="day__icons" aria-hidden="true">' + icon('i-tv') + icon('i-darts') + icon('i-pool') + '</span>' +
-          '<span class="visually-hidden">' + spoken + '</span>' +
-        '</p>' +
+        '<span class="day__icons" aria-hidden="true">' + icon('i-tv') + icon('i-darts') + icon('i-pool') + '</span>' +
+        (ev ? '<p class="day__event">' + icon(ev.icon) + ev.name + ' ' + ev.time +
+          (act ? '<span class="act">' + escapeHtml(act) + '</span>' : '') + '</p>' : '') +
+        '<span class="visually-hidden">Sport on TV, darts and pool</span>' +
       '</li>';
     }
     list.innerHTML = html;
+  }
 
-    if (next && nextSat) {
-      var when;
-      if (nextSat.offset === 0) when = 'today';
-      else if (nextSat.offset === 1) when = 'tomorrow';
-      else when = 'Saturday ' + nextSat.date.getUTCDate() + ' ' + MONTHS[nextSat.date.getUTCMonth()];
-      next.innerHTML = 'Next live music: <strong>' + when + '</strong>';
-    }
+  // Past Fridays drop off the line-up; the card goes once they've all passed
+  function initLineup() {
+    var card = document.querySelector('[data-lineup]');
+    if (!card) return;
+    var t = london();
+    var todayIso = t.y + '-' + String(t.m).padStart(2, '0') + '-' + String(t.d).padStart(2, '0');
+    var left = 0;
+    card.querySelectorAll('[data-date]').forEach(function (li) {
+      var past = li.getAttribute('data-date') < todayIso;
+      li.hidden = past;
+      if (!past) left++;
+    });
+    card.hidden = left === 0;
   }
 
   /* ---------- Outside: today's sunset over Camberwell ---------- */
@@ -506,6 +561,8 @@
     setInterval(updateStatus, 30000);
     initBar();
     initPhotos();
+    initCrest();
+    initLineup();
     initWeek();
     initSun();
     initMenu();
