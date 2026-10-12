@@ -1,5 +1,5 @@
 /* Hennessy's, Camberwell
-   Stout black and cream, with the red and gold of the pub's frontage. Caslon lettering. Mobile first. */
+   Stout black and cream, Caslon lettering. Mobile first. */
 
 @font-face {
   font-family: "Caslon Display";
@@ -35,11 +35,6 @@
   --stout-2: #1c1713;
   --stout-3: #2a221b;
   --ruby: #5b2419;
-  /* From the frontage: red paintwork, gold lettering */
-  --red: #a3232a;
-  --red-dark: #8a1c22;
-  --red-deep: #5c1418;
-  --gold: #d6b46e;
   --cream: #efe5cf;
   --cream-2: #e4d7b9;
   --paper: #f4eddc;
@@ -361,11 +356,10 @@ html.nav-open { overflow: hidden; }
 .status--chip {
   margin-top: 1.75rem;
   padding: .5rem 1rem .5rem .85rem;
-  border: 1px solid rgba(244, 231, 200, .4);
+  border: 1px solid var(--line-dark);
   border-radius: 999px;
   font-size: .875rem;
-  color: #f4e7c8;
-  background: rgba(0, 0, 0, .12);
+  color: var(--cream);
 }
 
 /* ---------- Hero ---------- */
@@ -375,7 +369,7 @@ html.nav-open { overflow: hidden; }
   padding-top: calc(var(--bar-h) + env(safe-area-inset-top) + .75rem);
   padding-bottom: 0;
   background:
-    radial-gradient(120% 55% at 50% 0%, rgba(163, 35, 42, .3), transparent 70%),
+    radial-gradient(120% 55% at 50% 0%, rgba(91, 36, 25, .38), transparent 70%),
     var(--stout);
   color: var(--cream);
   --soft: var(--cream-soft);
@@ -386,7 +380,6 @@ html.nav-open { overflow: hidden; }
   display: grid;
   gap: 1.25rem;
 }
-.hero__grid:not(.has-photo) .fascia { width: 100%; max-width: 46rem; margin-inline: auto; }
 .hero__grid > *, .find__grid > *, .find__cards > * { min-width: 0; }
 
 /* The sign board */
@@ -394,11 +387,8 @@ html.nav-open { overflow: hidden; }
   position: relative;
   padding: clamp(2.5rem, 11vw, 4rem) clamp(.75rem, 4vw, 1.25rem) clamp(2.25rem, 9vw, 3.5rem);
   text-align: center;
-  color: #f4e7c8;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, .07), transparent 40%, rgba(0, 0, 0, .2)),
-    var(--red);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, .45), 0 24px 50px rgba(0, 0, 0, .35);
+  border: 1px solid var(--line-dark);
+  background: linear-gradient(180deg, rgba(239, 229, 207, .025), transparent 60%);
 }
 .fascia::before,
 .fascia::after {
@@ -407,30 +397,19 @@ html.nav-open { overflow: hidden; }
   pointer-events: none;
 }
 .fascia::before {
-  inset: 8px;
-  border: 1px solid rgba(214, 180, 110, .7);
+  inset: 7px;
+  border: 1px solid rgba(239, 229, 207, .34);
 }
 /* Corner rivets */
 .fascia::after {
   inset: 15px;
   background:
-    radial-gradient(circle, var(--gold) 1.3px, transparent 1.8px) left top / 6px 6px no-repeat,
-    radial-gradient(circle, var(--gold) 1.3px, transparent 1.8px) right top / 6px 6px no-repeat,
-    radial-gradient(circle, var(--gold) 1.3px, transparent 1.8px) left bottom / 6px 6px no-repeat,
-    radial-gradient(circle, var(--gold) 1.3px, transparent 1.8px) right bottom / 6px 6px no-repeat;
-  opacity: .9;
+    radial-gradient(circle, var(--cream) 1.3px, transparent 1.8px) left top / 6px 6px no-repeat,
+    radial-gradient(circle, var(--cream) 1.3px, transparent 1.8px) right top / 6px 6px no-repeat,
+    radial-gradient(circle, var(--cream) 1.3px, transparent 1.8px) left bottom / 6px 6px no-repeat,
+    radial-gradient(circle, var(--cream) 1.3px, transparent 1.8px) right bottom / 6px 6px no-repeat;
+  opacity: .55;
 }
-
-/* The pub's crest, shown only once the image has loaded */
-.fascia__crest {
-  display: none;
-  width: clamp(4.75rem, 21vw, 6.5rem);
-  height: auto;
-  margin: 0 auto 1.25rem;
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px rgba(214, 180, 110, .85), 0 0 0 5px var(--red), 0 0 0 6px rgba(214, 180, 110, .45);
-}
-.fascia__crest.is-loaded { display: block; }
 
 .fascia__name {
   font-family: var(--display);
@@ -438,9 +417,9 @@ html.nav-open { overflow: hidden; }
   font-size: clamp(2.75rem, 18vw, 8.25rem);
   line-height: .95;
   letter-spacing: -.01em;
-  color: #f4e7c8;
-  /* Sign-writer's drop shade, a darker red under the lettering */
-  text-shadow: .035em .04em 0 var(--red-deep), 0 0 .6em rgba(0, 0, 0, .25);
+  color: var(--cream);
+  /* Sign-writer's drop shade, in the ruby you see when a pint is held to the light */
+  text-shadow: .035em .04em 0 var(--ruby), 0 0 .6em rgba(0, 0, 0, .35);
 }
 
 .fascia__place {
@@ -459,17 +438,18 @@ html.nav-open { overflow: hidden; }
   content: "";
   width: clamp(1.5rem, 9vw, 3.5rem);
   height: 1px;
-  background: var(--gold);
+  background: currentColor;
+  opacity: .55;
 }
 
 .fascia__hours {
   margin-top: 1rem;
   font-style: italic;
   font-size: clamp(1.05rem, 4.2vw, 1.3rem);
-  color: rgba(244, 231, 200, .85);
+  color: var(--cream-soft);
 }
 
-.photo--front { margin-inline: calc(var(--gutter) * -1); }
+.slot--hero { margin-inline: calc(var(--gutter) * -1); }
 
 /* The cream band between the hero and the pint, like the head on a stout */
 .head-band {
@@ -492,29 +472,26 @@ html.nav-open { overflow: hidden; }
 .head-band__list li { padding-inline: .4rem; }
 .head-band__list li + li { border-left: 1px solid var(--line-light); }
 
-/* ---------- Photos ---------- */
-/* A photo shows only once its file has loaded. Without it, the layout closes up around the text. */
+/* ---------- Photo slots ---------- */
 
-.photo { display: none; }
-.photo.is-loaded { display: block; }
-.photo img {
-  width: 100%;
-  height: auto;
+.slot {
+  position: relative;
   aspect-ratio: var(--ratio, 3 / 2);
+  overflow: hidden;
+  background-color: color-mix(in srgb, currentColor 6%, transparent);
+}
+.slot img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  background: var(--stout-2);
   opacity: 0;
-  transform: scale(1.02);
+  transform: scale(1.03);
   transition: opacity 2.4s var(--ease), transform 4s var(--ease-settle);
 }
-.photo.is-shown img { opacity: 1; transform: none; }
-.photo figcaption {
-  margin-top: .8rem;
-  font-style: italic;
-  font-size: .9375rem;
-  line-height: 1.45;
-  color: var(--soft);
-}
+.slot.has-photo img { opacity: 1; transform: none; }
+.slot--outside img { object-position: 50% 70%; }
 
 /* ---------- The pint ---------- */
 
@@ -534,7 +511,7 @@ html.nav-open { overflow: hidden; }
 .pint__grid {
   position: relative;
   display: grid;
-  gap: 2.5rem;
+  gap: 3rem;
 }
 
 .price {
@@ -543,6 +520,7 @@ html.nav-open { overflow: hidden; }
   align-items: baseline;
   flex-wrap: wrap;
   gap: .25rem 1rem;
+  margin-top: 2rem;
   padding-bottom: 1.25rem;
 }
 .price__figure {
@@ -550,7 +528,7 @@ html.nav-open { overflow: hidden; }
   font-size: clamp(6.5rem, 34vw, 11rem);
   line-height: .85;
   letter-spacing: -.03em;
-  text-shadow: .03em .035em 0 var(--red);
+  text-shadow: .03em .035em 0 var(--ruby);
 }
 .price__unit {
   font-style: italic;
@@ -579,11 +557,22 @@ html.nav-open { overflow: hidden; }
   margin-top: 2.75rem;
 }
 
+.week-head {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.week-head__next {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+.week-head__next strong { font-weight: 400; font-style: normal; border-bottom: 1px solid currentColor; }
+
 .legend {
   display: flex;
   flex-wrap: wrap;
   gap: .4rem 1.1rem;
-  margin-bottom: 1.25rem;
   font-size: .8125rem;
   color: var(--soft);
 }
@@ -595,70 +584,52 @@ html.nav-open { overflow: hidden; }
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: "when icons" "event event";
   align-items: center;
-  gap: .3rem 1rem;
+  gap: .25rem 1rem;
   min-height: 3.75rem;
-  padding: .75rem .9rem;
+  padding: .7rem .9rem;
   margin-inline: -.9rem;
   border-bottom: 1px solid var(--line);
   transition: background-color 1.2s var(--ease);
 }
-.day__when { grid-area: when; display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+.day__when { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
 .day__rel { font-family: var(--display); font-size: 1.35rem; line-height: 1.1; }
 .day__date { font-size: .8125rem; color: var(--soft); }
-.day__icons { grid-area: icons; display: flex; gap: .55rem; opacity: .7; }
+.day__on { display: flex; align-items: center; justify-content: flex-end; gap: .75rem; font-size: .875rem; color: var(--soft); }
+.day__icons { display: flex; gap: .55rem; color: var(--ink); opacity: .75; }
 .day__icons svg { width: 1.15rem; height: 1.15rem; }
-.day__event {
-  grid-area: event;
-  display: flex;
+.day__feature {
+  display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: .2rem .5rem;
-  font-size: .9375rem;
+  gap: .4rem;
+  font-size: .75rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--cream);
 }
-.day__event svg { width: 1.15rem; height: 1.15rem; flex: none; }
-.day__event .act { flex-basis: 100%; padding-left: 1.65rem; font-family: var(--display); font-size: 1.25rem; line-height: 1.2; }
+.day__feature svg { width: 1.15rem; height: 1.15rem; }
+.day__today {
+  font-size: .6875rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  padding: .1rem .45rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  align-self: center;
+}
 
 .day--music {
-  background: var(--red);
-  color: #f4e7c8;
+  background: var(--stout);
+  color: var(--cream);
   border-bottom-color: transparent;
-  --soft: rgba(244, 231, 200, .8);
+  --soft: var(--cream-soft);
 }
-.day--music .day__icons { opacity: .85; }
+.day--music .day__icons { color: var(--cream); }
+.day--music .day__rel { color: var(--cream); }
 .day.is-today:not(.day--music) { background: color-mix(in srgb, var(--ink) 5%, transparent); }
 
 .js .day { opacity: 0; transform: translateY(-.4rem); transition: opacity 1.4s var(--ease) var(--delay, 0s), transform 1.8s var(--ease-settle) var(--delay, 0s), background-color 1.2s var(--ease); }
 .js .week.is-settled .day { opacity: 1; transform: none; }
-
-.lineup {
-  margin-top: 2rem;
-  padding: 1.35rem 1.25rem 1rem;
-  border: 1px solid var(--line);
-  background: rgba(255, 252, 244, .45);
-}
-.lineup[hidden] { display: none; }
-.lineup__title {
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: 1.6rem;
-  line-height: 1.1;
-}
-.lineup__note { margin-top: .2rem; font-size: .875rem; font-style: italic; color: var(--soft); }
-.lineup__list { margin-top: .9rem; border-top: 1px solid var(--line); }
-.lineup__list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-  padding: .6rem 0;
-  border-bottom: 1px solid var(--line);
-}
-.lineup__list li:last-child { border-bottom: 0; }
-.lineup__list li[hidden] { display: none; }
-.lineup__date { font-size: .9375rem; color: var(--soft); white-space: nowrap; }
-.lineup__act { font-family: var(--display); font-size: 1.25rem; line-height: 1.2; text-align: right; }
 
 .week__note {
   margin-top: 1.25rem;
@@ -711,9 +682,10 @@ html:not(.js) .sun__arc, html:not(.js) .sun__head { display: none; }
 
 /* ---------- Food ---------- */
 
-.food__grid { display: grid; gap: 2.5rem; }
+.food__grid { display: grid; gap: 3rem; }
 
 .menu {
+  margin-top: 1rem;
   border-top: 1px solid var(--line-dark);
   counter-reset: dish;
 }
@@ -750,11 +722,9 @@ html:not(.js) .sun__arc, html:not(.js) .sun__head { display: none; }
     var(--paper);
 }
 
-.history__grid { display: grid; gap: 3rem; }
-.history__side { display: grid; gap: 2.5rem; align-content: start; }
-
 .timeline {
   position: relative;
+  margin-top: 3rem;
   padding-left: 2.25rem;
   --pour: 0;
 }
@@ -832,31 +802,20 @@ html:not(.js) .era__note { opacity: 1; transform: none; }
   display: inline-block;
   margin-top: .6rem;
   padding: .35em .6em .3em;
-  background: var(--red);
-  color: rgba(244, 231, 200, .25);
-  box-shadow: inset 0 0 0 5px var(--red), inset 0 0 0 6px rgba(214, 180, 110, .7);
+  background: var(--stout);
+  color: rgba(239, 229, 207, .2);
+  box-shadow: inset 0 0 0 5px var(--stout), inset 0 0 0 6px rgba(239, 229, 207, .35);
   transition: color 2.4s var(--ease);
 }
 .era--now.is-poured .era__name,
 html:not(.js) .era--now .era__name {
-  color: #f4e7c8;
-  text-shadow: .035em .04em 0 var(--red-deep);
-}
-
-/* ---------- Google rating ---------- */
-
-.rating-band {
-  background: var(--stout-2);
   color: var(--cream);
-  padding-block: clamp(3rem, 9vw, 4.5rem);
+  text-shadow: .035em .04em 0 var(--ruby);
 }
-.rating-band__inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem 2rem;
-}
+
+/* ---------- Reviews ---------- */
+
+.reviews__head { max-width: none; }
 
 .rating {
   display: flex;
@@ -887,6 +846,8 @@ html:not(.js) .era--now .era__name {
 }
 .is-settled .stars__row--fill,
 html:not(.js) .stars__row--fill { clip-path: inset(0 var(--clip-to) 0 0); }
+
+.reviews__more { margin-top: 2rem; }
 
 .link-arrow {
   display: inline-flex;
@@ -934,8 +895,8 @@ html:not(.js) .stars__row--fill { clip-path: inset(0 var(--clip-to) 0 0); }
 }
 .btn svg { width: 1.15rem; height: 1.15rem; flex: none; }
 .find__actions .btn { flex: 1 1 12rem; }
-.btn--solid { background: var(--red); border-color: var(--red); color: #f4e7c8; }
-.btn--solid:hover { background: var(--red-dark); border-color: var(--red-dark); }
+.btn--solid { background: var(--ink); color: var(--cream); }
+.btn--solid:hover { background: var(--stout-3); }
 .btn--line { background: transparent; color: var(--ink); }
 .btn--line:hover { background: rgba(26, 21, 17, .06); }
 
@@ -951,6 +912,7 @@ html:not(.js) .stars__row--fill { clip-path: inset(0 var(--clip-to) 0 0); }
   font-size: 1.6rem;
   line-height: 1.1;
 }
+.card__note { margin-top: .75rem; font-size: .9375rem; font-style: italic; color: var(--ink-soft); }
 
 .status--line { margin-top: .6rem; font-size: .9375rem; color: var(--ink-soft); }
 
@@ -1020,7 +982,7 @@ html:not(.js) .stars__row--fill { clip-path: inset(0 var(--clip-to) 0 0); }
   font-family: var(--display);
   font-size: clamp(3rem, 15vw, 5.5rem);
   line-height: 1;
-  text-shadow: .035em .04em 0 var(--red);
+  text-shadow: .035em .04em 0 var(--ruby);
 }
 .foot__place {
   display: flex;
@@ -1103,15 +1065,14 @@ html:not(.js) .stars__row--fill { clip-path: inset(0 var(--clip-to) 0 0); }
   .bar__status { display: none; }
 
   .hero { padding-top: calc(var(--bar-h) + 2rem); }
-  .hero__grid.has-photo {
+  .hero__grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: stretch;
     gap: 1.5rem;
   }
   .fascia { display: flex; flex-direction: column; justify-content: center; align-items: center; }
   .fascia__name { font-size: clamp(3.75rem, 6.2vw, 5.75rem); }
-  .photo--front { margin-inline: 0; }
-  .photo--front img { height: 100%; aspect-ratio: auto; min-height: 100%; }
+  .slot--hero { margin-inline: 0; }
   .head-band { margin-top: 2.5rem; }
   .head-band__list {
     display: flex;
@@ -1134,35 +1095,30 @@ html:not(.js) .stars__row--fill { clip-path: inset(0 var(--clip-to) 0 0); }
 
   .pint__grid {
     grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-    align-items: end;
+    align-items: center;
     gap: 5rem;
   }
-  .price { justify-self: end; }
 
-  .whatson__grid { max-width: 46rem; }
-  .whatson__grid.has-photo {
-    max-width: none;
+  .whatson__grid {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-    align-items: start;
+    align-items: center;
     gap: 4rem;
   }
-  .photo--lyrics { position: sticky; top: calc(var(--bar-h) + 2rem); }
 
-  .outside__copy { max-width: 40rem; }
-  .outside__grid.has-photo {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  .outside__grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     align-items: center;
     gap: 4.5rem;
   }
 
-  .food__grid {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    align-items: start;
-    gap: 5rem;
-  }
+  .food__copy { max-width: 46rem; }
 
-  .history__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 5rem; align-items: start; }
+  .history .wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 5rem; align-items: start; }
+  .history .section-head { position: sticky; top: calc(var(--bar-h) + 3rem); }
   .timeline { margin-top: .5rem; }
+
+  .reviews__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.5rem; }
+  .reviews__head .kicker { width: 100%; margin-bottom: 0; }
 
   .find__grid { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 4.5rem; align-items: start; }
 }
