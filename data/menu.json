@@ -1,0 +1,26 @@
+{
+  "_comment": "PLACEHOLDER. Hennessy's serves food but no menu was found. These five pub classics are sample dishes for the demo only. Replace them with the kitchen's real dishes before this goes anywhere public.",
+  "placeholder": true,
+  "items": [
+    {
+      "name": "Beef & Guinness pie",
+      "description": "Beef braised in Guinness under a shortcrust lid, with mash and greens."
+    },
+    {
+      "name": "Fish & chips",
+      "description": "Battered haddock, thick-cut chips, mushy peas and tartare sauce."
+    },
+    {
+      "name": "Sausage & mash",
+      "description": "Pork sausages on buttery mash with onion gravy."
+    },
+    {
+      "name": "Irish stew",
+      "description": "Lamb, potato and root vegetables, with soda bread and butter."
+    },
+    {
+      "name": "Ham & cheese toastie",
+      "description": "Thick-cut ham and mature cheddar, toasted, with pickle on the side."
+    }
+  ]
+}
